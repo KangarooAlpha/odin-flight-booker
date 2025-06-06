@@ -1,0 +1,18 @@
+<% if @flights.present? %>
+    <% @flights.each do |flight| %>
+        
+        <%= flight.departure_airport.airport_code %> <br>
+        <%= flight.arrival_airport.airport_code %> <br>
+        <%= flight.date.strftime("%B %d, %Y %I:%M %p") %> <br>
+        <%= flight.duration %> <br>
+        <%= @num_tickets %> <br>
+        <%= flight.id%>
+        <%= form_with url: new_booking_path, method: "get" do %>
+            <%= hidden_field_tag :flight_id, flight.id%>
+            <%= hidden_field_tag :num_tickets, @num_tickets%>
+            <%= submit_tag "Select this flight"%>
+        <% end %>
+    <% end %>
+<% elsif params[:departure_airport].present? %>
+    <h1>No flights found.</h1>
+<% end %>

@@ -1,0 +1,21 @@
+<h1>Hi</h1>
+<%= @flight.id %>
+<%= @num_tickets %>
+<%= form_with model: @booking, method: "post" do |f| %>
+    <%= f.hidden_field :flight_id, value: @flight.id %>
+    <%= f.fields_for :passengers do |p_form| %>
+        <fieldset>
+        <div>
+            <%= p_form.label :name, "Name: " %>
+            <%= p_form.text_field :name %>
+        </div>
+        <div>
+            <%= p_form.label :email, "Email: " %>
+            <%= p_form.email_field :email %>
+        </div>
+        </fieldset>
+
+    <% end %>
+
+    <%= f.submit "Create Booking" %>
+<% end %>
