@@ -1,21 +1,45 @@
+<%= javascript_importmap_tags %>
+
 <h1>Hi</h1>
 <%= @flight.id %>
 <%= @num_tickets %>
 <%= form_with model: @booking, method: "post" do |f| %>
     <%= f.hidden_field :flight_id, value: @flight.id %>
-    <%= f.fields_for :passengers do |p_form| %>
-        <fieldset>
-        <div>
-            <%= p_form.label :name, "Name: " %>
-            <%= p_form.text_field :name %>
-        </div>
-        <div>
-            <%= p_form.label :email, "Email: " %>
-            <%= p_form.email_field :email %>
-        </div>
-        </fieldset>
+    <div data-controller="booking" data-booking-index-values="<%=@num_tickets%>">
+        <div data-booking-target="container">
+            <%= f.fields_for :passengers do |p_form| %>
+                <fieldset data-passenger-wrapper>
+                <div>
+                    <%= p_form.label :name, "Name: " %>
+                    <%= p_form.text_field :name %>
+                </div>
+                <div>
+                    <%= p_form.label :email, "Email: " %>
+                    <%= p_form.email_field :email %>
+                </div>
+                <button type = "button"data-action="booking#deleteOne">Remove This Passenger</button>
+                </fieldset>
 
-    <% end %>
+            <% end %>
+
+            <template data-passenger-template>
+                <fieldset data-passenger-wrapper>
+                    <div>
+                        <label>Name: </label>
+                        <input type="text" name="booking[passengers_attributes][NEW_INDEX][name]">
+                    </div>
+                    <div>
+                        <label>Email: </label>
+                        <input type="text" name="booking[passengers_attributes][NEW_INDEX][email]">
+                    </div>
+                    <button data-action="booking#deleteOne">Remove This Passenger</button>
+                </fieldset>
+
+            </template>
+        </div>
+            <button type="button" data-action="booking#addOne">Add a Passenger</button>
+    </div>
 
     <%= f.submit "Create Booking" %>
 <% end %>
+

@@ -12,6 +12,11 @@ class FlightsController < ApplicationController
       )
 
     end
+    respond_to do |format|
+        format.html # index.html.erb
+        format.xml  { render xml: [ @date.pluck(:date), @departure_airports.pluck(:airport_code) ] }
+        format.json { render json: @date }
+      end
   end
 
   def new
