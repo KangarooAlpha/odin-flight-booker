@@ -9,12 +9,18 @@ class BookingsController < ApplicationController
 
   def create
     @booking = Booking.new(booking_params)
-    if @booking.save
-      puts "Redirecting to booking show page with ID #{@booking.id}"
-      redirect_to booking_path(@booking)
-    else
-      puts @booking.errors.full_messages
-      render :new, status: :unprocessable_entity
+
+    respond_to do |format|
+      if @booking.save
+        puts "Redirecting to booking show page with ID #{@booking.id}"
+        @booking.passengers.each do |passenger|
+          PassengerMailer.with(booking: @booking, passenger: passenger).welcome_email.deliver_now
+        end
+        format.html { redirect_to booking_path(@booking) }
+      else
+        puts @booking.errors.full_messages
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 

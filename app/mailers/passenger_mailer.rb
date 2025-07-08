@@ -1,10 +1,10 @@
 class PassengerMailer < ApplicationMailer
   default from: "notfications@flightBooker.com"
 
-  def welcome_email(booking, passenger)
-    @booking = booking
-    @flight = booking.flight
-    @passenger = passenger
+  def welcome_email
+    @booking = params[:booking]
+    @flight = @booking.flight
+    @passenger = params[:passenger]
 
     mail(
     to: @passenger.email,
